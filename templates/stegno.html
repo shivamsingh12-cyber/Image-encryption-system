@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% block content %}
+<style type="text/css">
+        body{
+            background-color: black;
+            color: #2bff00;
+        }
+        .jumbotron {
+        	background-color: black;
+        }
+    </style>
+    <br><br><br><br><br>
+<div class="jumbotron">
+    <div class="typewriter">
+    <h1>Hide Text in Image</h1>
+    <br></div>
+    <div class="col">
+        <h1>Home</h1>
+        <p>Go to <a href="{{ url_for('encode') }}">Encode</a> page to hide a message in your image.</p>
+        <p>Go to <a href="{{ url_for('decode') }}">Decode</a> page in order to try finding secret message in your image. </p>
+    </div>
+    
+</div>
+	<br><br><br><br><br><br><br>
+{% endblock %}

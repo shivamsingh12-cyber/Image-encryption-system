@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+    <h1 style="margin-top: 47px;">Encode</h1>
+    <form method=post enctype=multipart/form-data action="{{ url_for('encode') }}">
+
+        <label for="secret_message">Enter secret message:</label>
+        <input type="text" id="secret_message" name="secret_message">
+            <br/>
+            <br/>
+        <label for="img">Select image:</label>
+        <input type="file" id="image" name="image" accept="image/*">
+        <br/>
+        <br/>
+        <input type="submit" style="margin-top: 55px;">
+
+    </form>
+
+    <div style="margin-top: 321px;" >Please remember: you can use only images in .PNG format!</div>
+   
+
+{% endblock content %}
