@@ -179,5 +179,29 @@ def decode():
 
     return render_template('decode.html')
 
+# Virus file detection Code
+
+@app.route('/virusfile')
+def virus():
+    return render_template('virus.html')
+
+@app.route('/output', methods = ['GET', 'POST'])
+def detect():
+    if request.method == 'POST':
+        global file
+        file = request.files['file']  
+        file_name,extension = os.path.splitext(file.filename)
+        if str(extension)==".exe":
+          return render_template('virus.html', 
+          output="File Detected:: ",
+          message=file_name+extension+" file is a virus file")
+        else:
+          return render_template('virus.html', 
+          output="File Detected:: ",
+          message=file_name+extension+" file is not a virus file")
+
+    else:
+        return "It Is not a valid request"
+
 if __name__=="__main__":
     app.run(debug=True)

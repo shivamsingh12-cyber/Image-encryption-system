@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<br><br><br><br><br><br><br><br><br><br>
+
+<div class="typewriter">
+<h2>Virus File Detection</h2>
+<h3>Upload Your file to Detect</h3>
+<br><br>
+</div>
+<div class="center1">
+<form action="/output" method="post" enctype="multipart/form-data" >
+    <div >
+    <input type="file" name="file" />
+    <br><br>
+    <input style="text-align: center;" type="submit" value="Upload" align="center">
+</div>
+<br><br><br><br><br><br><br><br>
+
+<h3>{{output}} {{ message }}</h3>
+</div>
+    {% endblock %}
