@@ -26,11 +26,9 @@ class imageencrypt(db.Model):
     password=db.Column(db.String(100), nullable=False)
     email=db.Column(db.String(150), nullable=False)
 
-    def __repr__(self,sno,fname,password,phone,payment,username,email):
-        self.sno = sno
+    def __init__(self,fname,password,phone,username,email):
         self.fname = fname
         self.phone = phone
-        self.payment = payment
         self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         self.username = username
         self.email = email
@@ -58,9 +56,7 @@ def login():
             session['name']=user.username
             session['fee']=user.payment
             return redirect('/home')
-    elif 'name' in session:
-     return redirect('/home')
-        
+        return redirect('/home')    
     else:
         return render_template('login.html')
   
@@ -119,8 +115,13 @@ def decrypt(key,file):
 def index():
     if 'name' in session:
         user=imageencrypt.query.filter_by(username=session['name']).first()
+        data=imageencrypt.query.filter_by(payment=session['fee'])
         """Renders the home page."""
-        return render_template('index.html',title='Home Page',year=datetime.now().year,user=user,display="Pay to use feature")
+        if session.get('fee'):
+                return render_template('index.html',title='Home Page',year=datetime.now().year,user=user,data=data)
+        else:
+             session['fee']=True
+             return render_template('index.html',title='Home Page',year=datetime.now().year,user=user,display="Pay to use feature")
     else:
         return redirect('login')
 
@@ -324,8 +325,7 @@ def pay(data):
 def pay_page():
     if 'name' in session:
         user=imageencrypt.query.filter_by(username=session['name']).first()
-        data=imageencrypt.query.filter_by(payment=session['fee'])
-        return render_template('card.html',user=user,data=data)
+        return render_template('card.html',user=user)
     return redirect('/login')
 
 if __name__=="__main__":
