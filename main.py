@@ -10,6 +10,7 @@ from flask import send_from_directory
 from flask import send_file
 from steganography import create_image, decode_image
 
+
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"]= "sqlite:///imageencrypt.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATION"]= False
@@ -51,8 +52,13 @@ def login():
         password=request.form['password']
 
         user = imageencrypt.query.filter_by(username=username).first()
+        
 
+     
         if user and user.check_password(password):
+            if user.username == "admin":
+                session['name']=user.fname
+                return redirect('/admin')
             session['name']=user.username
             session['fee']=user.payment
             return redirect('/home')
@@ -128,7 +134,26 @@ def index():
 @app.route('/logout')
 def logout():
         session.pop('name',None)
+        session.pop('fee',None)
         return redirect('/login')
+
+@app.route('/admin')
+def admin_page():
+        students = imageencrypt.query.all()
+        return render_template('admin.html',students=students)
+
+@app.route('/<int:id>/delete',methods=['GET','POST'])
+def delete(id):
+    delete = imageencrypt.query.filter_by(sno=id).first()
+    if request.method=='POST':
+        if delete:
+            db.session.delete(delete)
+            db.session.commit()
+            return redirect('/admin')
+            abort(404)
+    return render_template('delete.html')
+
+       
 
 @app.route('/decrypt')
 def contact():
